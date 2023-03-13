@@ -116,10 +116,6 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private val requestPermission =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-    }
-
     private fun checkBluetoothPermission() {
         if (!BLEUtil.permissionsOK(this))
             Snackbar.make(binding!!.root, "This app need Location to use BLE", Snackbar.LENGTH_LONG)
@@ -127,14 +123,6 @@ class MainActivity : AppCompatActivity() {
                     BLEUtil.requestBlePermissions(this, 1)
                 }.show()
 
-        if (!isPermissionsOk(this))
-            Snackbar.make(binding!!.root, "This app need Storage to record log", Snackbar.LENGTH_LONG)
-                .setAction("OK") {
-                    val intent  = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                    intent.data = Uri.parse("package:" + this.packageName);
-
-                    requestPermission.launch(intent)
-                }.show()
     }
 
     private fun triggerScan(v: MenuItem) {
@@ -144,6 +132,7 @@ class MainActivity : AppCompatActivity() {
             BLEUtil.stopScan()
             v.title = "SCAN"
         } else {
+            checkBluetoothPermission()
 
             MyContext.deviceTable.clearScanDeviceTable()
 

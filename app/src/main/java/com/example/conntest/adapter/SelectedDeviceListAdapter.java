@@ -124,65 +124,65 @@ public class SelectedDeviceListAdapter extends RecyclerView.Adapter<SelectedDevi
             choose(holder, holder.getAdapterPosition());
         });
 
-        TextView spendTimeTv = holder.getSpendTimeTv();
-        TextView connectionStateTv = holder.getConnectionStateTv();
+//        TextView spendTimeTv = holder.getSpendTimeTv();
+//        TextView connectionStateTv = holder.getConnectionStateTv();
 
-        Button connectionBtn = holder.getConnectionBtn();
-        if (device.getConnected()) {
-            spendTimeTv.setText("耗时：" + device.getSpendTime() + "ms");
-            connectionStateTv.setText("已连接");
-            connectionBtn.setText("Dis");
-            connectionBtn.setEnabled(true);
-            connectionBtn.setOnClickListener(v -> {
-                if (System.currentTimeMillis() - lastClickTime < 1000) return;
-                lastClickTime = System.currentTimeMillis();
-
-                connectionBtn.setEnabled(false);
-
-                BluetoothGatt gatt = device.getBluetoothGatt();
-                assert gatt != null;
-
-                long l = System.currentTimeMillis();
-                boolean b = BLEUtil.disconnect0(device.getBluetoothGatt()).getDisconnected();
-                l = System.currentTimeMillis() - l;
-                device.setSpendTime(l);
-
-                if (b) {
-                    device.setConnected(false);
-                    MyContext.deviceTable.notifyDeviceDisconnectedInSelectedList(holder.getAdapterPosition());
-                } else {
-                    connectionBtn.setEnabled(true);
-                }
-            });
-        } else {
-            spendTimeTv.setText("耗时：" + device.getSpendTime() + "ms");
-            connectionStateTv.setText("空闲");
-            connectionBtn.setText("Con");
-            connectionBtn.setEnabled(true);
-            connectionBtn.setOnClickListener(v -> {
-                if (System.currentTimeMillis() - lastClickTime < 1000) return;
-                lastClickTime = System.currentTimeMillis();
-
-                connectionBtn.setEnabled(false);
-
-                long l = System.currentTimeMillis();
-                BluetoothGatt bluetoothGatt = BLEUtil.connect0(device.getDeviceHandle()).getGatt();
-                l = System.currentTimeMillis() - l;
-                device.setSpendTime(l);
-
-                Log.i(TAG, "onBindViewHolder: " + bluetoothGatt);
-
-                if (bluetoothGatt != null) {
-                    connectionBtn.setEnabled(false);
-
-                    device.setConnected(true);
-                    device.setBluetoothGatt(bluetoothGatt);
-                    MyContext.deviceTable.notifyDeviceConnectedInSelectedList(holder.getAdapterPosition());
-                } else {
-                    connectionBtn.setEnabled(true);
-                }
-            });
-        }
+//        Button connectionBtn = holder.getConnectionBtn();
+//        if (device.getConnected()) {
+//            spendTimeTv.setText("耗时：" + device.getSpendTime() + "ms");
+//            connectionStateTv.setText("已连接");
+//            connectionBtn.setText("Dis");
+//            connectionBtn.setEnabled(true);
+//            connectionBtn.setOnClickListener(v -> {
+//                if (System.currentTimeMillis() - lastClickTime < 1000) return;
+//                lastClickTime = System.currentTimeMillis();
+//
+//                connectionBtn.setEnabled(false);
+//
+//                BluetoothGatt gatt = device.getBluetoothGatt();
+//                assert gatt != null;
+//
+//                long l = System.currentTimeMillis();
+//                boolean b = BLEUtil.disconnect0(device.getBluetoothGatt()).getDisconnected();
+//                l = System.currentTimeMillis() - l;
+//                device.setSpendTime(l);
+//
+//                if (b) {
+//                    device.setConnected(false);
+//                    MyContext.deviceTable.notifyDeviceDisconnectedInSelectedList(holder.getAdapterPosition());
+//                } else {
+//                    connectionBtn.setEnabled(true);
+//                }
+//            });
+//        } else {
+//            spendTimeTv.setText("耗时：" + device.getSpendTime() + "ms");
+//            connectionStateTv.setText("空闲");
+//            connectionBtn.setText("Con");
+//            connectionBtn.setEnabled(true);
+//            connectionBtn.setOnClickListener(v -> {
+//                if (System.currentTimeMillis() - lastClickTime < 1000) return;
+//                lastClickTime = System.currentTimeMillis();
+//
+//                connectionBtn.setEnabled(false);
+//
+//                long l = System.currentTimeMillis();
+//                BluetoothGatt bluetoothGatt = BLEUtil.connect0(device.getDeviceHandle()).getGatt();
+//                l = System.currentTimeMillis() - l;
+//                device.setSpendTime(l);
+//
+//                Log.i(TAG, "onBindViewHolder: " + bluetoothGatt);
+//
+//                if (bluetoothGatt != null) {
+//                    connectionBtn.setEnabled(false);
+//
+//                    device.setConnected(true);
+//                    device.setBluetoothGatt(bluetoothGatt);
+//                    MyContext.deviceTable.notifyDeviceConnectedInSelectedList(holder.getAdapterPosition());
+//                } else {
+//                    connectionBtn.setEnabled(true);
+//                }
+//            });
+//        }
 
         Button removeBtn = holder.getRemoveBtn();
         removeBtn.setOnClickListener(v ->
@@ -202,10 +202,10 @@ public class SelectedDeviceListAdapter extends RecyclerView.Adapter<SelectedDevi
 
         private final TextView deviceNameTv;
         private final ConstraintLayout layout;
-        private final Button connectionBtn;
+//        private final Button connectionBtn;
         private final Button removeBtn;
-        private final TextView spendTimeTv;
-        private final TextView connectionStateTv;
+//        private final TextView spendTimeTv;
+//        private final TextView connectionStateTv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -213,10 +213,10 @@ public class SelectedDeviceListAdapter extends RecyclerView.Adapter<SelectedDevi
             // Define click listener for the ViewHolder's View
             deviceNameTv = itemView.findViewById(R.id.device_name_tv);
             layout = itemView.findViewById(R.id.root);
-            connectionBtn = itemView.findViewById(R.id.connection_btn);
+//            connectionBtn = itemView.findViewById(R.id.connection_btn);
             removeBtn = itemView.findViewById(R.id.remove_btn);
-            spendTimeTv = itemView.findViewById(R.id.spend_time_tv);
-            connectionStateTv = itemView.findViewById(R.id.connection_state_tv);
+//            spendTimeTv = itemView.findViewById(R.id.spend_time_tv);
+//            connectionStateTv = itemView.findViewById(R.id.connection_state_tv);
         }
 
         public TextView getDeviceNameTv() {
@@ -227,21 +227,21 @@ public class SelectedDeviceListAdapter extends RecyclerView.Adapter<SelectedDevi
             return layout;
         }
 
-        public Button getConnectionBtn() {
-            return connectionBtn;
-        }
+//        public Button getConnectionBtn() {
+//            return connectionBtn;
+//        }
 
         public Button getRemoveBtn() {
             return removeBtn;
         }
-
-        public TextView getSpendTimeTv() {
-            return spendTimeTv;
-        }
-
-        public TextView getConnectionStateTv() {
-            return connectionStateTv;
-        }
+//
+//        public TextView getSpendTimeTv() {
+//            return spendTimeTv;
+//        }
+//
+//        public TextView getConnectionStateTv() {
+//            return connectionStateTv;
+//        }
     }
 
 }

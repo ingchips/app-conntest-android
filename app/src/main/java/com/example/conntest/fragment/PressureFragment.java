@@ -1,23 +1,26 @@
 package com.example.conntest.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.conntest.BuildConfig;
-import com.example.conntest.MainActivity;
 import com.example.conntest.adapter.PressureTabViewPager2Adapter;
 import com.example.conntest.common.MyContext;
 import com.example.conntest.databinding.FragmentPressurePanelBinding;
@@ -52,6 +55,22 @@ public class PressureFragment extends Fragment {
         return (fragmentList.size() == 2) ? (PressureStatsFragment) fragmentList.get(1) : null;
     }
 
+
+
+    private ActivityResultLauncher<Intent> requestPermission =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            }) ;
+    private void checkStoragePermission() {
+        if (!Environment.isExternalStorageManager()) {
+            Snackbar.make(binding.getRoot(), "This app need Storage to record log", Snackbar.LENGTH_LONG)
+                .setAction("OK", v -> {
+                    Intent intent  = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+
+                    requestPermission.launch(intent);
+                }).show();
+        }
+    }
 
     @Nullable
     @Override
@@ -94,7 +113,14 @@ public class PressureFragment extends Fragment {
         });
 
         binding.pressureExportBtn.setOnClickListener(v -> {
+            checkStoragePermission();
+            if (!Environment.isExternalStorageManager())
+                return;
+
             if (pressureContext != null) {
+
+                checkStoragePermission();
+
                 boolean b = CsvUtil.exportCsv(pressureContext.getRoundInfoList());
                 if (b) {
                     Snackbar.make(binding.getRoot(), "csv文件已成功导出", Snackbar.LENGTH_LONG)
