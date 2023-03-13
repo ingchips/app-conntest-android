@@ -53,11 +53,7 @@ public class Pressure0 extends PressureTemplate{
     Result connect(BluetoothDevice device) {
         long t1 = System.currentTimeMillis();
         BLEUtil.ConnectResult connectResult0 = null;
-        if (random(0, 4) == 0) {
-            connectResult0 = new BLEUtil.ConnectResult(null, false, 133, 0);
-        } else {
-            connectResult0 = BLEUtil.connect0(device);
-        }
+        connectResult0 = BLEUtil.connect0(device);
         long t2 = System.currentTimeMillis();
 
         ConnectResult connectResult = new ConnectResult();
