@@ -35,7 +35,6 @@ import java.util.Vector;
 public class PressureFragment extends Fragment {
 
     private static final String TAG = PressureFragment.class.getSimpleName();
-    private static final String TEST_FIX_DEVICE_ADDRESS = "CD:7C:3B:26:34:82";
 
     private FragmentPressurePanelBinding binding;
 
@@ -85,7 +84,7 @@ public class PressureFragment extends Fragment {
 
         binding.pressureStartBtn.setOnClickListener(v -> {
             //if (device == null) return;
-            pressureContext = MyContext.pressureContext.getPressureContext(TEST_FIX_DEVICE_ADDRESS);
+            pressureContext = MyContext.pressureContext.getPressureContext(device.getAddress());
             pressureContext.getTaskHandle().start();
         });
 
@@ -145,20 +144,16 @@ public class PressureFragment extends Fragment {
 
         Vector<Device> selectedDeviceList = MyContext.deviceTable.getSelectedDeviceList();
 
-//        if (i == -1 || selectedDeviceList.size() == 0) {
-//            this.device = null;
-//        } else {
-//            this.device = selectedDeviceList.get(i);
-//
-//            Log.i(TAG, "onResume: " + device.getAddress());
-//
-//            MyContext.pressureContext.getPressureContext(device.getAddress());
-//            MyContext.pressureContext.switchPressureContext(device.getAddress());
-//        }
+        if (i == -1 || selectedDeviceList.size() == 0) {
+            this.device = null;
+        } else {
+            this.device = selectedDeviceList.get(i);
 
+            Log.i(TAG, "onResume: " + device.getAddress());
 
-            MyContext.pressureContext.getPressureContext(TEST_FIX_DEVICE_ADDRESS);
-            MyContext.pressureContext.switchPressureContext(TEST_FIX_DEVICE_ADDRESS);
+            MyContext.pressureContext.getPressureContext(device.getAddress());
+            MyContext.pressureContext.switchPressureContext(device.getAddress());
+        }
     }
 
     /*
